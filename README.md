@@ -16,6 +16,7 @@ This project fetches the latest news headlines using the NewsAPI and sends a sum
    TWILIO_AUTH_TOKEN=your_twilio_auth_token
    TWILIO_SENDER_NUMBER=your_twilio_sender_number
    RECIPIENT_NUMBER=recipient_whatsapp_number
+   SCHEDULE_TIME=HH:MM  # Time to send the news daily (24-hour format, default is 07:30)
    ```
 4. Run the script:
    ```
