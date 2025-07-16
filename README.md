@@ -22,6 +22,21 @@ This project fetches the latest news headlines using the NewsAPI and sends a sum
    python news.py
    ```
 
+## API Keys and Configuration
+
+To use this project, you need to obtain the following API keys and credentials:
+
+1. **NewsAPI Key**:
+   - Visit [NewsAPI](https://newsapi.org/) and sign up for a free account.
+   - Generate an API key from your account dashboard.
+
+2. **Twilio Credentials**:
+   - Visit [Twilio](https://www.twilio.com/) and sign up for a free account.
+   - Obtain your `Account SID` and `Auth Token` from the Twilio Console.
+   - Set up a Twilio WhatsApp sender number by following Twilio's [WhatsApp setup guide](https://www.twilio.com/whatsapp).
+
+Update the `.env` file with these credentials as shown in the setup instructions above.
+
 ## Project Structure
 
 ```
