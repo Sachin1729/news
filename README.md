@@ -50,3 +50,7 @@ Update the `.env` file with these credentials as shown in the setup instructions
 ## Features
 - Fetches top news headlines.
 - Sends a WhatsApp message with the news summary.
+
+## Graceful Shutdown
+
+The script now includes a feature to handle interruptions gracefully. If you press `Ctrl+C` while the script is running, it will stop the scheduler and exit cleanly with a message.

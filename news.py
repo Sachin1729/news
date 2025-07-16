@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 import schedule
 import time
+import signal
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -38,7 +39,15 @@ def send_news():
     print("Message SID:", message.sid)
 
 # Schedule the news to be sent daily at 11:30 AM
-schedule.every().day.at("7:30").do(send_news)
+schedule.every().day.at("07:30").do(send_news)
+
+# Graceful shutdown handler
+def graceful_shutdown(signum, frame):
+    print("\nScheduler stopped gracefully.")
+    exit(0)
+
+# Register the signal handler
+signal.signal(signal.SIGINT, graceful_shutdown)
 
 # Run the scheduler
 if __name__ == "__main__":
