@@ -56,3 +56,23 @@ Update the `.env` file with these credentials as shown in the setup instructions
 ## Graceful Shutdown
 
 The script now includes a feature to handle interruptions gracefully. If you press `Ctrl+C` while the script is running, it will stop the scheduler and exit cleanly with a message.
+
+## API Endpoints
+
+### `/send-news`
+- **Method**: POST
+- **Description**: Triggers the news summary to be sent immediately via WhatsApp.
+- **Response**:
+  - Success: 
+    ```json
+    {
+        "message": "News summary fetched successfully.",
+        "news": "- News headline 1 (URL)\n- News headline 2 (URL)\n..."
+    }
+    ```
+  - Error: `{ "error": "<error_message>" }`
+
+### `/health`
+- **Method**: GET
+- **Description**: Checks the health of the application.
+- **Response**: `OK`

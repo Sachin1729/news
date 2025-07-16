@@ -24,14 +24,18 @@ app = Flask(__name__)
 # Function to fetch and send news
 def send_news():
     # Fetch top headlines
-    top = newsapi.get_top_headlines(language="en", page_size=10)
+    top = newsapi.get_top_headlines(language="en", page_size=5)  # Limit to 5 articles for scheduled news
 
     # Collect the news headlines and format them into a message body
-    news_summary = "\n".join([f"- {article['title']} ({article['url']})" for article in top["articles"][:5]])
+    news_summary = "\n".join([f"- {article['title']} ({article['url']})" for article in top["articles"]])
 
     # Get recipient and sender numbers from environment variables
     recipient_number = os.getenv("RECIPIENT_NUMBER")
-    sender_number = os.getenv("TWILIO_WHATSAPP_NUMBER")
+    sender_number = os.getenv("TWILIO_SENDER_NUMBER")
+
+    # Validate sender and recipient numbers
+    if not sender_number or not recipient_number:
+        raise ValueError("TWILIO_SENDER_NUMBER and RECIPIENT_NUMBER must be set in the environment variables.")
 
     # Send the message via Twilio
     message = client.messages.create(
@@ -60,8 +64,15 @@ signal.signal(signal.SIGINT, graceful_shutdown)
 @app.route("/send-news", methods=["POST"])
 def trigger_send_news():
     try:
-        send_news()
-        return jsonify({"message": "News summary sent successfully."}), 200
+        send_news()  # Call the send_news function to send the news
+        
+        # Fetch top headlines
+        top = newsapi.get_top_headlines(language="en", page_size=10)
+
+        # Collect the news headlines and format them into a response body
+        news_summary = "\n".join([f"- {article['title']} ({article['url']})" for article in top["articles"]])
+
+        return jsonify({"message": "News summary fetched successfully.", "news": news_summary}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
