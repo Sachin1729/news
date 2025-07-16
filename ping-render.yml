@@ -1,0 +1,16 @@
+name: Ping Render
+
+on:
+  schedule:
+    - cron: '58 1 * * *' # 7:28 AM IST
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    env:
+      RENDER_PING_URL: ${{ secrets.RENDER_PING_URL }}
+    steps:
+      - name: Curl your app
+        run: |
+          curl -sSf "$RENDER_PING_URL" || echo "Ping failed"
