@@ -38,8 +38,11 @@ def send_news():
 
     print("Message SID:", message.sid)
 
-# Schedule the news to be sent daily at 11:30 AM
-schedule.every().day.at("07:30").do(send_news)
+# Load schedule time from environment variables
+schedule_time = os.getenv("SCHEDULE_TIME", "07:30")  # Default to 07:30 if not set
+
+# Schedule the news to be sent daily at the specified time
+schedule.every().day.at(schedule_time).do(send_news)
 
 # Graceful shutdown handler
 def graceful_shutdown(signum, frame):
