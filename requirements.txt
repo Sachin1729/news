@@ -1,4 +1,5 @@
-newsapi-python
-twilio
+Flask
 python-dotenv
 schedule
+twilio
+newsapi-python

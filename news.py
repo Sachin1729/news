@@ -1,10 +1,12 @@
 from newsapi import NewsApiClient
 from twilio.rest import Client
 from dotenv import load_dotenv
+from flask import Flask, jsonify
 import os
 import schedule
 import time
 import signal
+import threading
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -16,6 +18,8 @@ newsapi = NewsApiClient(api_key=os.getenv("NEWS_API_KEY"))
 account_sid = os.getenv("TWILIO_ACCOUNT_SID")
 auth_token = os.getenv("TWILIO_AUTH_TOKEN")
 client = Client(account_sid, auth_token)
+
+app = Flask(__name__)
 
 # Function to fetch and send news
 def send_news():
@@ -52,9 +56,33 @@ def graceful_shutdown(signum, frame):
 # Register the signal handler
 signal.signal(signal.SIGINT, graceful_shutdown)
 
-# Run the scheduler
-if __name__ == "__main__":
-    print("Scheduler is running. Waiting to send daily news...")
+# Flask route to trigger news summary manually
+@app.route("/send-news", methods=["POST"])
+def trigger_send_news():
+    try:
+        send_news()
+        return jsonify({"message": "News summary sent successfully."}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# Flask route to check the health of the application
+@app.route("/health", methods=["GET"])
+def health():
+    return "OK", 200
+
+# Function to run the scheduler in a separate thread
+def run_scheduler():
     while True:
         schedule.run_pending()
         time.sleep(60)
+
+port = int(os.getenv("PORT", 5000))  # Load port from environment variables, default to 5000 if not set
+
+if __name__ == "__main__":
+    # Start the scheduler in a separate thread
+    scheduler_thread = threading.Thread(target=run_scheduler, daemon=True)
+    scheduler_thread.start()
+
+    # Run the Flask app
+    app.run(host="0.0.0.0", port=port)
+
