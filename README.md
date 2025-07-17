@@ -15,6 +15,7 @@ This project fetches the latest news headlines using the NewsAPI and sends a sum
    TWILIO_ACCOUNT_SID=your_twilio_account_sid
    TWILIO_AUTH_TOKEN=your_twilio_auth_token
    TWILIO_SENDER_NUMBER=your_twilio_sender_number
+   TWILIO_TEMPLATE_SID=your_twilio_template_sid  # SID for the Twilio message template
    RECIPIENT_NUMBER=recipient_whatsapp_number
    SCHEDULE_TIME=HH:MM  # Time to send the news daily (24-hour format, default is 07:30)
    PORT=8000  # Port number for the Flask application
@@ -34,7 +35,7 @@ To use this project, you need to obtain the following API keys and credentials:
 
 2. **Twilio Credentials**:
    - Visit [Twilio](https://www.twilio.com/) and sign up for a free account.
-   - Obtain your `Account SID` and `Auth Token` from the Twilio Console.
+   - Obtain your `Account SID`, `Auth Token`, and `Template SID` from the Twilio Console.
    - Set up a Twilio WhatsApp sender number by following Twilio's [WhatsApp setup guide](https://www.twilio.com/whatsapp).
 
 Update the `.env` file with these credentials as shown in the setup instructions above.

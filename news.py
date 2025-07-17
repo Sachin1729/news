@@ -1,3 +1,4 @@
+import json
 from newsapi import NewsApiClient
 from twilio.rest import Client
 from dotenv import load_dotenv
@@ -17,6 +18,7 @@ newsapi = NewsApiClient(api_key=os.getenv("NEWS_API_KEY"))
 # Initialize Twilio client
 account_sid = os.getenv("TWILIO_ACCOUNT_SID")
 auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+twilio_template_sid = os.getenv("TWILIO_TEMPLATE_SID")
 client = Client(account_sid, auth_token)
 
 app = Flask(__name__)
@@ -40,8 +42,13 @@ def send_news():
     # Send the message via Twilio
     message = client.messages.create(
         from_='whatsapp:' + sender_number,
-        body=f'Hello Sachin! Your AI news summary is ready 🧠📬\n\n{news_summary}',
-        to='whatsapp:' + recipient_number
+        to='whatsapp:' + recipient_number,
+        content_sid={twilio_template_sid},  # Use SID OR use content_template with variables
+        content_variables=json.dumps({
+            "1": "Sachin",
+            "2": "🧠📬\n\n"+str(news_summary),
+            "3": "\n\nThis is an automated message from NewsAI."
+        }),
     )
 
     print("Message SID:", message.sid)
